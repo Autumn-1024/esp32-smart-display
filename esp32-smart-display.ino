@@ -21,6 +21,8 @@
 #include "web_server.h"
 #include "button.h"
 #include <DHT.h>
+#include <OneWire.h>
+#include <DallasTemperature.h>
 
 // ============================
 //  全局对象
@@ -30,6 +32,14 @@ WifiManager wifiMgr;
 ConfigWebServer webServer;
 ButtonManager buttons;
 DHT dht(DHT_PIN, DHT_TYPE);
+
+// DS18B20 三路独立
+OneWire oneWireA(DS18B20_PIN_A);
+OneWire oneWireB(DS18B20_PIN_B);
+OneWire oneWireC(DS18B20_PIN_C);
+DallasTemperature dsA(&oneWireA);
+DallasTemperature dsB(&oneWireB);
+DallasTemperature dsC(&oneWireC);
 
 // WiFi连接结果标志
 static volatile bool wifiConnectDone = false;
@@ -183,6 +193,12 @@ void setup() {
     dht.begin();
     Serial.println("DHT11 initialized");
 
+    // 初始化DS18B20
+    dsA.begin();
+    dsB.begin();
+    dsC.begin();
+    Serial.println("DS18B20 initialized (3 sensors)");
+
     // 注册WiFi回调
     wifiMgr.onConnected(onConnected);
     wifiMgr.onFailed(onFailed);
@@ -247,10 +263,12 @@ void loop() {
         // 处理管理页面Web请求
         webServer.handleClient();
 
-        // 每2秒读取一次DHT11数据
-        static unsigned long lastDhtRead = 0;
-        if (millis() - lastDhtRead > 2000) {
-            lastDhtRead = millis();
+        // 每2秒读取一次传感器数据
+        static unsigned long lastSensorRead = 0;
+        if (millis() - lastSensorRead > 2000) {
+            lastSensorRead = millis();
+
+            // 读取DHT11
             float h = dht.readHumidity();
             float t = dht.readTemperature();
             if (!isnan(h) && !isnan(t)) {
@@ -259,6 +277,16 @@ void loop() {
             } else {
                 Serial.println("DHT11 read failed!");
             }
+
+            // 读取DS18B20
+            dsA.requestTemperatures();
+            dsB.requestTemperatures();
+            dsC.requestTemperatures();
+            float tempA = dsA.getTempCByIndex(0);
+            float tempB = dsB.getTempCByIndex(0);
+            float tempC = dsC.getTempCByIndex(0);
+            webServer.setPhaseTemp(tempA, tempB, tempC);
+            Serial.printf("DS18B20: A=%.1f°C B=%.1f°C C=%.1f°C\n", tempA, tempB, tempC);
         }
     }
 

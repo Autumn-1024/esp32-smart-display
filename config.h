@@ -19,6 +19,11 @@
 #define DHT_PIN   15
 #define DHT_TYPE  DHT11
 
+// DS18B20 温度传感器（三相温度）
+#define DS18B20_PIN_A  4   // A相温度
+#define DS18B20_PIN_B  13  // B相温度
+#define DS18B20_PIN_C  14  // C相温度
+
 // OLED 尺寸
 #define OLED_WIDTH  128
 #define OLED_HEIGHT 64

@@ -304,10 +304,8 @@ void ConfigWebServer::handleManageRoot() {
 }
 
 void ConfigWebServer::handleApiData() {
-    // 只生成非DHT11的随机数据，保留真实温湿度
-    phaseATemp = 35.0 + random(0, 450) / 10.0;
-    phaseBTemp = 35.0 + random(0, 450) / 10.0;
-    phaseCTemp = 35.0 + random(0, 450) / 10.0;
+    // 只生成电压电流随机数据，保留真实传感器数据
+    // phaseATemp/B/C 由 DS18B20 实时更新
     phaseAVolt = 215.0 + random(0, 300) / 10.0;
     phaseBVolt = 215.0 + random(0, 300) / 10.0;
     phaseCVolt = 215.0 + random(0, 300) / 10.0;
@@ -338,6 +336,12 @@ void ConfigWebServer::handleApiData() {
 void ConfigWebServer::setScreenData(float temp, float humidity) {
     screenTemp = temp;
     screenHumi = humidity;
+}
+
+void ConfigWebServer::setPhaseTemp(float a, float b, float c) {
+    phaseATemp = a;
+    phaseBTemp = b;
+    phaseCTemp = c;
 }
 
 void ConfigWebServer::generateSensorData() {

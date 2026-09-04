@@ -18,6 +18,7 @@ public:
 
     // 设置真实传感器数据
     void setScreenData(float temp, float humidity);
+    void setPhaseTemp(float a, float b, float c);
 
 private:
     WebServer* _server = nullptr;
