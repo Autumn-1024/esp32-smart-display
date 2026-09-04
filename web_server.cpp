@@ -327,6 +327,11 @@ void ConfigWebServer::handleApiData() {
     _server->send(200, "application/json", json);
 }
 
+void ConfigWebServer::setScreenData(float temp, float humidity) {
+    screenTemp = temp;
+    screenHumi = humidity;
+}
+
 void ConfigWebServer::generateSensorData() {
     screenTemp = 25.0 + random(-50, 100) / 10.0;   // 20~35°C
     screenHumi = 45.0 + random(-150, 250) / 10.0;   // 30~70%

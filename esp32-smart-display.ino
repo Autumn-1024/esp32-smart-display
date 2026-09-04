@@ -20,6 +20,7 @@
 #include "wifi_manager.h"
 #include "web_server.h"
 #include "button.h"
+#include <DHT.h>
 
 // ============================
 //  全局对象
@@ -28,6 +29,7 @@ OledDisplay oled;
 WifiManager wifiMgr;
 ConfigWebServer webServer;
 ButtonManager buttons;
+DHT dht(DHT_PIN, DHT_TYPE);
 
 // WiFi连接结果标志
 static volatile bool wifiConnectDone = false;
@@ -177,6 +179,10 @@ void setup() {
     // 初始化按键
     buttons.begin();
 
+    // 初始化DHT11
+    dht.begin();
+    Serial.println("DHT11 initialized");
+
     // 注册WiFi回调
     wifiMgr.onConnected(onConnected);
     wifiMgr.onFailed(onFailed);
@@ -240,7 +246,20 @@ void loop() {
     if (wifiMgr.getState() == WIFI_CONNECTED) {
         // 处理管理页面Web请求
         webServer.handleClient();
-        // TODO: 后续添加主功能逻辑（传感器采集等）
+
+        // 每2秒读取一次DHT11数据
+        static unsigned long lastDhtRead = 0;
+        if (millis() - lastDhtRead > 2000) {
+            lastDhtRead = millis();
+            float h = dht.readHumidity();
+            float t = dht.readTemperature();
+            if (!isnan(h) && !isnan(t)) {
+                webServer.setScreenData(t, h);
+                Serial.printf("DHT11: T=%.1f°C H=%.1f%%\n", t, h);
+            } else {
+                Serial.println("DHT11 read failed!");
+            }
+        }
     }
 
     delay(10);

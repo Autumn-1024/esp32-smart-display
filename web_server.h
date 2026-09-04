@@ -16,6 +16,9 @@ public:
     // 获取随机模拟数据
     void generateSensorData();
 
+    // 设置真实传感器数据
+    void setScreenData(float temp, float humidity);
+
 private:
     WebServer* _server = nullptr;
     bool _manageMode = false;
