@@ -154,6 +154,11 @@ static const char MANAGE_PAGE[] PROGMEM = R"rawliteral(
         <div class="row"><span class="lbl">Phase C</span><span class="val" id="pCC">--<span class="unit">A</span></span></div>
     </div>
 
+    <div class="sec">
+        <div class="sec-title">Total Power</div>
+        <div class="row"><span class="lbl">Power</span><span class="val" id="pwr">--<span class="unit">W</span></span></div>
+    </div>
+
     <div class="footer">ESP32 Smart Display | Auto-refresh 2s</div>
 
     <script>
@@ -175,6 +180,7 @@ static const char MANAGE_PAGE[] PROGMEM = R"rawliteral(
                 document.getElementById('pAC').innerHTML=d.currentIa.toFixed(2)+'<span class="unit">A</span>';
                 document.getElementById('pBC').innerHTML=d.currentIb.toFixed(2)+'<span class="unit">A</span>';
                 document.getElementById('pCC').innerHTML=d.currentIc.toFixed(2)+'<span class="unit">A</span>';
+                document.getElementById('pwr').innerHTML=d.power.toFixed(1)+'<span class="unit">W</span>';
 
                 // 颜色标注
                 document.getElementById('sT').className='val '+cls(d.temp,15,45);
@@ -312,7 +318,10 @@ void ConfigWebServer::handleApiData() {
     json += "\"voltageUc\":" + String(phaseCVolt, 1) + ",";
     json += "\"currentIa\":" + String(phaseACurr, 2) + ",";
     json += "\"currentIb\":" + String(phaseBCurr, 2) + ",";
-    json += "\"currentIc\":" + String(phaseCCurr, 2);
+    json += "\"currentIc\":" + String(phaseCCurr, 2) + ",";
+    // 总功率 = 三相电压×电流之和
+    float totalPower = (phaseAVolt * phaseACurr) + (phaseBVolt * phaseBCurr) + (phaseCVolt * phaseCCurr);
+    json += "\"power\":" + String(totalPower, 1);
     json += "}";
 
     _server->send(200, "application/json", json);
