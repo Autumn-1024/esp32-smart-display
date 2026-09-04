@@ -128,27 +128,27 @@ static const char MANAGE_PAGE[] PROGMEM = R"rawliteral(
     <h1>System Monitor</h1>
 
     <div class="sec">
-        <div class="sec-title">📺 Screen</div>
+        <div class="sec-title">Screen</div>
         <div class="row"><span class="lbl">Temperature</span><span class="val" id="sT">--<span class="unit">°C</span></span></div>
         <div class="row"><span class="lbl">Humidity</span><span class="val" id="sH">--<span class="unit">%</span></span></div>
     </div>
 
     <div class="sec">
-        <div class="sec-title">🌡️ Phase Temperature</div>
+        <div class="sec-title">Phase Temperature</div>
         <div class="row"><span class="lbl">Phase A</span><span class="val" id="pAT">--<span class="unit">°C</span></span></div>
         <div class="row"><span class="lbl">Phase B</span><span class="val" id="pBT">--<span class="unit">°C</span></span></div>
         <div class="row"><span class="lbl">Phase C</span><span class="val" id="pCT">--<span class="unit">°C</span></span></div>
     </div>
 
     <div class="sec">
-        <div class="sec-title">⚡ Three-phase Voltage</div>
+        <div class="sec-title">Three-phase Voltage</div>
         <div class="row"><span class="lbl">Phase A</span><span class="val" id="pAV">--<span class="unit">V</span></span></div>
         <div class="row"><span class="lbl">Phase B</span><span class="val" id="pBV">--<span class="unit">V</span></span></div>
         <div class="row"><span class="lbl">Phase C</span><span class="val" id="pCV">--<span class="unit">V</span></span></div>
     </div>
 
     <div class="sec">
-        <div class="sec-title">🔌 Three-phase Current</div>
+        <div class="sec-title">Three-phase Current</div>
         <div class="row"><span class="lbl">Phase A</span><span class="val" id="pAC">--<span class="unit">A</span></span></div>
         <div class="row"><span class="lbl">Phase B</span><span class="val" id="pBC">--<span class="unit">A</span></span></div>
         <div class="row"><span class="lbl">Phase C</span><span class="val" id="pCC">--<span class="unit">A</span></span></div>
