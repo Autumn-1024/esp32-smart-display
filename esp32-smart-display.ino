@@ -63,6 +63,7 @@ void runProvisioning() {
 
     // 2. 启动Web Server
     webServer.begin();
+    webServer.startConfigMode();
 
     // 3. 显示等待连接
     oled.showAPWaiting(wifiMgr.getAPSSID(), CONFIG_IP);
@@ -143,6 +144,12 @@ void runConnectSTA() {
         Serial.print("WiFi Connected! IP: ");
         Serial.println(wifiResultIP);
         oled.showSuccess(wifiResultIP.c_str());
+
+        // 启动管理页面Web服务器
+        webServer.begin();
+        webServer.startManageMode();
+        Serial.print("Management page: http://");
+        Serial.println(wifiResultIP);
     } else {
         Serial.print("WiFi Connect Failed: ");
         Serial.println(wifiResultIP);
@@ -231,6 +238,8 @@ void loop() {
 
     // WiFi已连接状态处理
     if (wifiMgr.getState() == WIFI_CONNECTED) {
+        // 处理管理页面Web请求
+        webServer.handleClient();
         // TODO: 后续添加主功能逻辑（传感器采集等）
     }
 

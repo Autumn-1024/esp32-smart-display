@@ -9,21 +9,37 @@ public:
     void stop();
     void handleClient();
 
-    // 触发WiFi连接
-    void connectToWifi(const char* ssid, const char* password);
+    // 模式切换
+    void startConfigMode();   // 配网模式
+    void startManageMode();   // 管理模式（连上WiFi后）
+
+    // 获取随机模拟数据
+    void generateSensorData();
 
 private:
     WebServer* _server = nullptr;
+    bool _manageMode = false;
 
-    // 路由处理
+    // 模拟传感器数据
+    float screenTemp;
+    float screenHumi;
+    float phaseATemp, phaseBTemp, phaseCTemp;
+    float phaseAVolt, phaseBVolt, phaseCVolt;
+    float phaseACurr, phaseBCurr, phaseCCurr;
+
+    // 配网模式路由
     void handleRoot();
     void handleScan();
     void handleConnect();
-    void handleStatus();
+
+    // 管理模式路由
+    void handleManageRoot();
+    void handleApiData();
+
     void handleNotFound();
 
-    // 发送配网HTML页面
     void sendConfigPage();
+    void sendManagePage();
 };
 
 #endif // WEB_SERVER_H
