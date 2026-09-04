@@ -193,11 +193,17 @@ void setup() {
     dht.begin();
     Serial.println("DHT11 initialized");
 
-    // 初始化DS18B20
+    // 初始化DS18B20 - 启用内部上拉电阻
+    pinMode(DS18B20_PIN_A, INPUT_PULLUP);
+    pinMode(DS18B20_PIN_B, INPUT_PULLUP);
+    pinMode(DS18B20_PIN_C, INPUT_PULLUP);
     dsA.begin();
     dsB.begin();
     dsC.begin();
-    Serial.println("DS18B20 initialized (3 sensors)");
+    Serial.println("DS18B20 initialized");
+    Serial.printf("  A (GPIO%d): %d device(s)\n", DS18B20_PIN_A, dsA.getDeviceCount());
+    Serial.printf("  B (GPIO%d): %d device(s)\n", DS18B20_PIN_B, dsB.getDeviceCount());
+    Serial.printf("  C (GPIO%d): %d device(s)\n", DS18B20_PIN_C, dsC.getDeviceCount());
 
     // 注册WiFi回调
     wifiMgr.onConnected(onConnected);
