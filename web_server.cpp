@@ -304,8 +304,16 @@ void ConfigWebServer::handleManageRoot() {
 }
 
 void ConfigWebServer::handleApiData() {
-    // 每次请求生成新的随机数据
-    generateSensorData();
+    // 只生成非DHT11的随机数据，保留真实温湿度
+    phaseATemp = 35.0 + random(0, 450) / 10.0;
+    phaseBTemp = 35.0 + random(0, 450) / 10.0;
+    phaseCTemp = 35.0 + random(0, 450) / 10.0;
+    phaseAVolt = 215.0 + random(0, 300) / 10.0;
+    phaseBVolt = 215.0 + random(0, 300) / 10.0;
+    phaseCVolt = 215.0 + random(0, 300) / 10.0;
+    phaseACurr = 5.0 + random(0, 2000) / 100.0;
+    phaseBCurr = 5.0 + random(0, 2000) / 100.0;
+    phaseCCurr = 5.0 + random(0, 2000) / 100.0;
 
     String json = "{";
     json += "\"temp\":" + String(screenTemp, 1) + ",";
