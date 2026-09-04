@@ -164,30 +164,30 @@ static const char MANAGE_PAGE[] PROGMEM = R"rawliteral(
         }
         function upd(){
             fetch('/api/data').then(r=>r.json()).then(d=>{
-                document.getElementById('sT').innerHTML=d.screenT.toFixed(1)+'<span class="unit">°C</span>';
-                document.getElementById('sH').innerHTML=d.screenH.toFixed(1)+'<span class="unit">%</span>';
-                document.getElementById('pAT').innerHTML=d.phAT.toFixed(1)+'<span class="unit">°C</span>';
-                document.getElementById('pBT').innerHTML=d.phBT.toFixed(1)+'<span class="unit">°C</span>';
-                document.getElementById('pCT').innerHTML=d.phCT.toFixed(1)+'<span class="unit">°C</span>';
-                document.getElementById('pAV').innerHTML=d.phAV.toFixed(1)+'<span class="unit">V</span>';
-                document.getElementById('pBV').innerHTML=d.phBV.toFixed(1)+'<span class="unit">V</span>';
-                document.getElementById('pCV').innerHTML=d.phCV.toFixed(1)+'<span class="unit">V</span>';
-                document.getElementById('pAC').innerHTML=d.phAC.toFixed(2)+'<span class="unit">A</span>';
-                document.getElementById('pBC').innerHTML=d.phBC.toFixed(2)+'<span class="unit">A</span>';
-                document.getElementById('pCC').innerHTML=d.phCC.toFixed(2)+'<span class="unit">A</span>';
+                document.getElementById('sT').innerHTML=d.temp.toFixed(1)+'<span class="unit">°C</span>';
+                document.getElementById('sH').innerHTML=d.humidity.toFixed(1)+'<span class="unit">%</span>';
+                document.getElementById('pAT').innerHTML=d.phaseTempA.toFixed(1)+'<span class="unit">°C</span>';
+                document.getElementById('pBT').innerHTML=d.phaseTempB.toFixed(1)+'<span class="unit">°C</span>';
+                document.getElementById('pCT').innerHTML=d.phaseTempC.toFixed(1)+'<span class="unit">°C</span>';
+                document.getElementById('pAV').innerHTML=d.voltageUa.toFixed(1)+'<span class="unit">V</span>';
+                document.getElementById('pBV').innerHTML=d.voltageUb.toFixed(1)+'<span class="unit">V</span>';
+                document.getElementById('pCV').innerHTML=d.voltageUc.toFixed(1)+'<span class="unit">V</span>';
+                document.getElementById('pAC').innerHTML=d.currentIa.toFixed(2)+'<span class="unit">A</span>';
+                document.getElementById('pBC').innerHTML=d.currentIb.toFixed(2)+'<span class="unit">A</span>';
+                document.getElementById('pCC').innerHTML=d.currentIc.toFixed(2)+'<span class="unit">A</span>';
 
                 // 颜色标注
-                document.getElementById('sT').className='val '+cls(d.screenT,15,45);
-                document.getElementById('sH').className='val '+cls(d.screenH,20,90);
-                document.getElementById('pAT').className='val '+cls(d.phAT,20,80);
-                document.getElementById('pBT').className='val '+cls(d.phBT,20,80);
-                document.getElementById('pCT').className='val '+cls(d.phCT,20,80);
-                document.getElementById('pAV').className='val '+cls(d.phAV,200,250);
-                document.getElementById('pBV').className='val '+cls(d.phBV,200,250);
-                document.getElementById('pCV').className='val '+cls(d.phCV,200,250);
-                document.getElementById('pAC').className='val '+cls(d.phAC,0,30);
-                document.getElementById('pBC').className='val '+cls(d.phBC,0,30);
-                document.getElementById('pCC').className='val '+cls(d.phCC,0,30);
+                document.getElementById('sT').className='val '+cls(d.temp,15,45);
+                document.getElementById('sH').className='val '+cls(d.humidity,20,90);
+                document.getElementById('pAT').className='val '+cls(d.phaseTempA,20,80);
+                document.getElementById('pBT').className='val '+cls(d.phaseTempB,20,80);
+                document.getElementById('pCT').className='val '+cls(d.phaseTempC,20,80);
+                document.getElementById('pAV').className='val '+cls(d.voltageUa,200,250);
+                document.getElementById('pBV').className='val '+cls(d.voltageUb,200,250);
+                document.getElementById('pCV').className='val '+cls(d.voltageUc,200,250);
+                document.getElementById('pAC').className='val '+cls(d.currentIa,0,30);
+                document.getElementById('pBC').className='val '+cls(d.currentIb,0,30);
+                document.getElementById('pCC').className='val '+cls(d.currentIc,0,30);
             }).catch(()=>{});
         }
         upd();
@@ -302,17 +302,17 @@ void ConfigWebServer::handleApiData() {
     generateSensorData();
 
     String json = "{";
-    json += "\"screenT\":" + String(screenTemp, 1) + ",";
-    json += "\"screenH\":" + String(screenHumi, 1) + ",";
-    json += "\"phAT\":" + String(phaseATemp, 1) + ",";
-    json += "\"phBT\":" + String(phaseBTemp, 1) + ",";
-    json += "\"phCT\":" + String(phaseCTemp, 1) + ",";
-    json += "\"phAV\":" + String(phaseAVolt, 1) + ",";
-    json += "\"phBV\":" + String(phaseBVolt, 1) + ",";
-    json += "\"phCV\":" + String(phaseCVolt, 1) + ",";
-    json += "\"phAC\":" + String(phaseACurr, 2) + ",";
-    json += "\"phBC\":" + String(phaseBCurr, 2) + ",";
-    json += "\"phCC\":" + String(phaseCCurr, 2);
+    json += "\"temp\":" + String(screenTemp, 1) + ",";
+    json += "\"humidity\":" + String(screenHumi, 1) + ",";
+    json += "\"phaseTempA\":" + String(phaseATemp, 1) + ",";
+    json += "\"phaseTempB\":" + String(phaseBTemp, 1) + ",";
+    json += "\"phaseTempC\":" + String(phaseCTemp, 1) + ",";
+    json += "\"voltageUa\":" + String(phaseAVolt, 1) + ",";
+    json += "\"voltageUb\":" + String(phaseBVolt, 1) + ",";
+    json += "\"voltageUc\":" + String(phaseCVolt, 1) + ",";
+    json += "\"currentIa\":" + String(phaseACurr, 2) + ",";
+    json += "\"currentIb\":" + String(phaseBCurr, 2) + ",";
+    json += "\"currentIc\":" + String(phaseCCurr, 2);
     json += "}";
 
     _server->send(200, "application/json", json);
