@@ -38,6 +38,7 @@ private:
 
     void clear();
     void display();
+    void drawSeparator(int y);
 };
 
 #endif // OLED_H

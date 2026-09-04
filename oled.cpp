@@ -32,135 +32,222 @@ DisplayState OledDisplay::getState() const {
     return _state;
 }
 
+// 绘制分隔线
+void OledDisplay::drawSeparator(int y) {
+    _display->drawFastHLine(0, y, OLED_WIDTH, SSD1306_WHITE);
+}
+
+// ============================
+//  开机画面
+// ============================
 void OledDisplay::showBoot() {
     clear();
-    _display->setTextSize(2);
-    _display->setTextColor(SSD1306_WHITE);
-    _display->setCursor(10, 10);
-    _display->println("ESP32");
     _display->setTextSize(1);
-    _display->setCursor(10, 40);
-    _display->println("Smart Display");
-    _display->setCursor(10, 55);
-    _display->println("Booting...");
+    _display->setTextColor(SSD1306_WHITE);
+
+    // 第1行：标题
+    _display->setCursor(0, 0);
+    _display->print("[Smart Display]");
+    drawSeparator(10);
+
+    // 第3行：品牌
+    _display->setTextSize(2);
+    _display->setCursor(25, 20);
+    _display->print("ESP32");
+
+    // 第5行：状态
+    _display->setTextSize(1);
+    _display->setCursor(0, 45);
+    _display->print("Booting...");
+
+    // 第7行：版本
+    _display->setCursor(0, 56);
+    _display->print("v1.0 | 2026-09-04");
+
     display();
 }
 
+// ============================
+//  WiFi配置页面（AP模式）
+// ============================
 void OledDisplay::showAPWaiting(const char* ssid, const char* ip) {
     clear();
     _display->setTextSize(1);
     _display->setTextColor(SSD1306_WHITE);
 
-    // 标题
+    // 第1行：标题
     _display->setCursor(0, 0);
-    _display->println("=== WiFi Config ===");
+    _display->print("[WiFi Config]");
+    drawSeparator(10);
 
-    // 第二行：请连接WiFi
-    _display->setCursor(0, 16);
-    _display->println("Please connect to:");
+    // 第3行：提示连接
+    _display->setCursor(0, 14);
+    _display->print("Connect to WiFi:");
 
-    // WiFi名称
-    _display->setCursor(0, 28);
+    // 第4行：SSID
+    _display->setCursor(0, 24);
     _display->print("SSID: ");
-    _display->println(ssid);
+    _display->print(ssid);
 
-    // 管理地址
-    _display->setCursor(0, 42);
-    _display->print("URL:  ");
-    _display->println(ip);
+    // 第5行：空行
 
-    // 提示
+    // 第6行：地址
+    _display->setCursor(0, 40);
+    _display->print("Open: ");
+    _display->print(ip);
+
+    // 第7行：分隔线
+    drawSeparator(52);
+
+    // 第8行：提示
     _display->setCursor(0, 56);
-    _display->println("Open browser & visit URL");
+    _display->print("Enter password to connect");
 
     display();
 }
 
+// ============================
+//  正在连接WiFi
+// ============================
 void OledDisplay::showConnecting(const char* ssid) {
     clear();
     _display->setTextSize(1);
     _display->setTextColor(SSD1306_WHITE);
 
-    _display->setCursor(0, 10);
-    _display->println("Connecting to WiFi...");
+    // 第1行：标题
+    _display->setCursor(0, 0);
+    _display->print("[WiFi Connect]");
+    drawSeparator(10);
 
-    _display->setCursor(0, 28);
+    // 第3行：正在连接
+    _display->setCursor(0, 14);
+    _display->print("Connecting...");
+
+    // 第4行：SSID
+    _display->setCursor(0, 24);
     _display->print("SSID: ");
-    _display->println(ssid);
+    _display->print(ssid);
 
-    // 动画点
+    // 第5行：空行
+
+    // 第6行：进度动画
     static int dots = 0;
-    _display->setCursor(0, 46);
+    _display->setCursor(0, 40);
     _display->print("Please wait");
     for (int i = 0; i < (dots % 4); i++) {
         _display->print(".");
     }
     dots++;
 
+    // 第7行：提示
+    _display->setCursor(0, 56);
+    _display->print("Press BTN0 to retry");
+
     display();
 }
 
+// ============================
+//  WiFi连接成功
+// ============================
 void OledDisplay::showSuccess(const char* ip) {
     clear();
     _display->setTextSize(1);
     _display->setTextColor(SSD1306_WHITE);
 
-    _display->setCursor(0, 5);
-    _display->println("*** WiFi Connected! ***");
+    // 第1行：标题
+    _display->setCursor(0, 0);
+    _display->print("[WiFi Status]");
+    drawSeparator(10);
 
-    _display->setCursor(0, 22);
-    _display->println("Status: ONLINE");
+    // 第3行：状态
+    _display->setCursor(0, 14);
+    _display->print("Status: ONLINE");
 
-    _display->setCursor(0, 38);
+    // 第4行：IP
+    _display->setCursor(0, 24);
     _display->print("IP: ");
-    _display->println(ip);
+    _display->print(ip);
 
-    _display->setCursor(0, 52);
-    _display->println("System ready.");
+    // 第5行：空行
+
+    // 第6行：分隔线
+    _display->setCursor(0, 40);
+    drawSeparator(40);
+
+    // 第7行：提示
+    _display->setCursor(0, 44);
+    _display->print("System ready");
+
+    // 第8行：按键提示
+    _display->setCursor(0, 56);
+    _display->print("BTN0: Config WiFi");
 
     display();
 }
 
+// ============================
+//  WiFi连接失败
+// ============================
 void OledDisplay::showFail(const char* msg) {
     clear();
     _display->setTextSize(1);
     _display->setTextColor(SSD1306_WHITE);
 
-    _display->setCursor(0, 5);
-    _display->println("WiFi Connect FAILED!");
+    // 第1行：标题
+    _display->setCursor(0, 0);
+    _display->print("[WiFi Error]");
+    drawSeparator(10);
 
-    _display->setCursor(0, 22);
-    _display->print("Reason: ");
-    _display->println(msg);
+    // 第3行：失败原因
+    _display->setCursor(0, 14);
+    _display->print("Failed: ");
+    _display->print(msg);
 
-    _display->setCursor(0, 42);
-    _display->println("Restarting AP mode...");
-    _display->setCursor(0, 56);
-    _display->println("Reconnect to configure");
+    // 第4-5行：空行
+
+    // 第6行：提示
+    _display->setCursor(0, 38);
+    _display->print("Returning to AP mode...");
+
+    // 第7行：分隔线
+    drawSeparator(50);
+
+    // 第8行：按键提示
+    _display->setCursor(0, 54);
+    _display->print("BTN0: Reconfig WiFi");
 
     display();
 }
 
+// ============================
+//  正在扫描WiFi
+// ============================
 void OledDisplay::showScanning() {
     clear();
     _display->setTextSize(1);
     _display->setTextColor(SSD1306_WHITE);
 
-    _display->setCursor(20, 25);
-    _display->println("Scanning WiFi...");
-    _display->setCursor(30, 40);
-    _display->println("Please wait");
+    // 第1行：标题
+    _display->setCursor(0, 0);
+    _display->print("[WiFi Scan]");
+    drawSeparator(10);
+
+    // 第4行：扫描中
+    _display->setCursor(0, 30);
+    _display->print("Scanning WiFi...");
+
+    // 第6行：等待
+    _display->setCursor(0, 48);
+    _display->print("Please wait...");
 
     display();
 }
 
 void OledDisplay::update() {
-    // 根据当前状态刷新显示（如动画等）
     unsigned long now = millis();
     if (now - _lastUpdate < DISPLAY_UPDATE_MS) return;
     _lastUpdate = now;
 
-    // 只对需要动画的状态做刷新
     if (_state == DISP_WIFI_CONNECTING) {
         showConnecting("");
     }
