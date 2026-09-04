@@ -101,7 +101,7 @@ void OledDisplay::showAPWaiting(const char* ssid, const char* ip) {
 
     // 第8行：提示
     _display->setCursor(0, 56);
-    _display->print("Enter password to connect");
+    _display->print("Enter pwd in browser");
 
     display();
 }
@@ -207,7 +207,7 @@ void OledDisplay::showFail(const char* msg) {
 
     // 第6行：提示
     _display->setCursor(0, 38);
-    _display->print("Returning to AP mode...");
+    _display->print("Back to AP mode...");
 
     // 第7行：分隔线
     drawSeparator(50);
