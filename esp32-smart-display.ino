@@ -250,6 +250,7 @@ void loop() {
         // 按键0长按：强制进入配网模式
         Serial.println("BTN0 long press: enter provisioning...");
         wifiMgr.disconnectSTA();
+        webServer.stop();       // 先停止旧的WebServer，避免端口冲突
         runProvisioning();
         runConnectSTA();
     } else if (event0 == BTN_PRESS) {
