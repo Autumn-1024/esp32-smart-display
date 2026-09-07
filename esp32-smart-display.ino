@@ -23,6 +23,7 @@
 #include <DHT.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
+#include "rs485_modbus.h"
 
 // ============================
 //  全局对象
@@ -205,6 +206,9 @@ void setup() {
     Serial.printf("  B (GPIO%d): %d device(s)\n", DS18B20_PIN_B, dsB.getDeviceCount());
     Serial.printf("  C (GPIO%d): %d device(s)\n", DS18B20_PIN_C, dsC.getDeviceCount());
 
+    // 初始化RS485 Modbus
+    rs485.begin();
+
     // 注册WiFi回调
     wifiMgr.onConnected(onConnected);
     wifiMgr.onFailed(onFailed);
@@ -293,6 +297,15 @@ void loop() {
             float tempC = dsC.getTempCByIndex(0);
             webServer.setPhaseTemp(tempA, tempB, tempC);
             Serial.printf("DS18B20: A=%.1f°C B=%.1f°C C=%.1f°C\n", tempA, tempB, tempC);
+
+            // 读取RS485电流互感器
+            float currents[6];
+            if (rs485.readCurrents(currents)) {
+                // 前3路作为三相电流
+                webServer.setCurrents(currents[0], currents[1], currents[2]);
+                Serial.printf("Currents: Ia=%.1fA Ib=%.1fA Ic=%.1fA\n",
+                              currents[0], currents[1], currents[2]);
+            }
         }
     }
 

@@ -24,6 +24,16 @@
 #define DS18B20_PIN_B  13  // B相温度
 #define DS18B20_PIN_C  14  // C相温度
 
+// RS485 Modbus（六路电流互感器）
+#define RS485_RX_PIN   16  // 485 RO
+#define RS485_TX_PIN   17  // 485 DI
+#define RS485_DE_PIN   27  // 485 DE+RE（收发切换）
+#define RS485_BAUD     9600
+#define MODBUS_ADDR    0x01  // 从机地址
+#define MODBUS_REG     0x0000  // 起始寄存器
+#define MODBUS_COUNT   6     // 读取6路电流
+#define CURRENT_RESOLUTION 0.1  // 电流分辨率 0.1A
+
 // OLED 尺寸
 #define OLED_WIDTH  128
 #define OLED_HEIGHT 64

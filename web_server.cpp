@@ -304,14 +304,14 @@ void ConfigWebServer::handleManageRoot() {
 }
 
 void ConfigWebServer::handleApiData() {
-    // 只生成电压电流随机数据，保留真实传感器数据
+    // 只生成电压随机数据，其他数据由传感器实时更新
     // phaseATemp/B/C 由 DS18B20 实时更新
+    // phaseACurr/B/C 由 RS485 电流互感器实时更新
+    // 电压暂用随机数据（后续用RS485读取真实电压）
     phaseAVolt = 215.0 + random(0, 300) / 10.0;
     phaseBVolt = 215.0 + random(0, 300) / 10.0;
     phaseCVolt = 215.0 + random(0, 300) / 10.0;
-    phaseACurr = 5.0 + random(0, 2000) / 100.0;
-    phaseBCurr = 5.0 + random(0, 2000) / 100.0;
-    phaseCCurr = 5.0 + random(0, 2000) / 100.0;
+    // phaseACurr/B/C 由 RS485 实时更新，不生成随机数据
 
     String json = "{";
     json += "\"temp\":" + String(screenTemp, 1) + ",";
@@ -342,6 +342,12 @@ void ConfigWebServer::setPhaseTemp(float a, float b, float c) {
     phaseATemp = a;
     phaseBTemp = b;
     phaseCTemp = c;
+}
+
+void ConfigWebServer::setCurrents(float ia, float ib, float ic) {
+    phaseACurr = ia;
+    phaseBCurr = ib;
+    phaseCCurr = ic;
 }
 
 void ConfigWebServer::generateSensorData() {
