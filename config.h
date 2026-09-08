@@ -22,7 +22,7 @@
 // DS18B20 温度传感器（三相温度）
 #define DS18B20_PIN_A  4   // A相温度
 #define DS18B20_PIN_B  13  // B相温度
-#define DS18B20_PIN_C  14  // C相温度
+#define DS18B20_PIN_C  5   // C相温度
 
 // RS485 Modbus（六路电流互感器）
 #define RS485_RX_PIN   16  // 485 RO
